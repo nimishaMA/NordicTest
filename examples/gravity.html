@@ -21,7 +21,7 @@
 
       function logData(data) {
         const el = document.querySelector("#gravityvector");
-        el.innerHTML = `gravityvector: ${data.detail.value}`;
+        el.innerHTML = `gravityvector: ${data.detail.value.x} ${data.detail.value.y} ${data.detail.value.z}`;
       }
       
       document.querySelector("#connectBtn").addEventListener("click", async () => {

@@ -21,7 +21,7 @@
 
       function logData(data) {
         const el = document.querySelector("#gas");
-        el.innerHTML = `co2: ${data.detail.value} ${data.detail.unit} tvoc: ${data.detail.value} ${data.detail.unit}`;
+        el.innerHTML = `co2: ${data.detail.eCO2.value} ${data.detail.eCO2.unit} tvoc: ${data.detail.TVOC.value} ${data.detail.TVOC.unit}`;
       }
       
       document.querySelector("#connectBtn").addEventListener("click", async () => {
