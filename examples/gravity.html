@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Thingy:52 Web Bluetooth</title>
+  </head>
+  <body>
+    <h1>gravityvector Reading</h1>
+    <button id="connectBtn">Connect</button>
+    <div id="gravityvector"></div>
+    <script type="module">
+      
+      import Thingy from "./index.js";
+
+      const thingy = new Thingy({logEnabled: true});
+
+      async function start(device) {
+        await device.connect();
+        await device.gravityvector.start();
+        await device.addEventListener("gravityvector", logData);
+      }
+
+      function logData(data) {
+        const el = document.querySelector("#gravityvector");
+        el.innerHTML = `gravityvector: ${data.detail.value} `;
+      }
+      
+      document.querySelector("#connectBtn").addEventListener("click", async () => {
+          start(thingy);
+      });
+    </script>
+  </body>
+</html>

@@ -159,7 +159,7 @@ class ThingyController {
 
   setDevice(device) {
     this.device = device;
-    this.tid = device.device.id;
+    this.tid = device.id;
   }
 
   getExecutedOperation(index) {
