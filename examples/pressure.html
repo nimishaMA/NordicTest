@@ -4,9 +4,9 @@
     <title>Thingy:52 Web Bluetooth</title>
   </head>
   <body>
-    <h1>gravityvector Reading</h1>
+    <h1>Thingy:52 pressure reading example</h1>
     <button id="connectBtn">Connect</button>
-    <div id="gravityvector"></div>
+    <div id="pressure"></div>
     <script type="module">
       
       import Thingy from "./index.js";
@@ -15,13 +15,13 @@
 
       async function start(device) {
         await device.connect();
-        await device.gravityvector.start();
-        await device.addEventListener("gravityvector", logData);
+        await device.pressure.start();
+        await device.addEventListener("pressure", logData);
       }
 
       function logData(data) {
-        const el = document.querySelector("#gravityvector");
-        el.innerHTML = `gravityvector: ${data.detail.value}`;
+        const el = document.querySelector("#pressure");
+        el.innerHTML = `pressure: ${data.detail.value} ${data.detail.unit}`;
       }
       
       document.querySelector("#connectBtn").addEventListener("click", async () => {
