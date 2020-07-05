@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Thingy:52 Web Bluetooth</title>
+  </head>
+  <body>
+    <h1>Thingy:52 temperature reading example</h1>
+    <button id="connectBtn">Connect</button>
+    <div id="temperature"></div>
+    <div id="pressure"></div>
+    <div id="gas"></div>
+    <div id="humidity"></div>
+    <div id="gravityvector"></div>
+    <script type="module">
+      
+      import Thingy from "./index.js";
+
+      const thingy = new Thingy({logEnabled: true});
+
+      async function start(device) {
+        await device.connect();
+        await device.temperature.start();
+        await device.addEventListener("temperature", logDataTemperature);
+        await device.pressure.start();
+        await device.addEventListener("pressure", logDataPressure);
+        await device.gas.start();
+        await device.addEventListener("gas", logDataGas);
+        await device.humidity.start();
+        await device.addEventListener("humidity", logDataHumidity);  
+        await device.gravityvector.start();
+        await device.addEventListener("gravityvector", logDataGravity);
+      }
+
+      function logDataTemperature(data) {
+        const el = document.querySelector("#temperature");
+        el.innerHTML = `Temperature: ${data.detail.value} ${data.detail.unit}`;
+
+      }
+       function logDataPressure(data) {
+        const elp = document.querySelector("#pressure");
+        elp.innerHTML = `Pressure: ${data.detail.value} ${data.detail.unit}`;
+      }
+      function logDataGas(data) {
+        const elg = document.querySelector("#gas");
+        elg.innerHTML = `co2: ${data.detail.eCO2.value} ${data.detail.eCO2.unit} tvoc: ${data.detail.TVOC.value} ${data.detail.TVOC.unit}`
+      }
+      function logDataHumidity(data) {
+        const elh = document.querySelector("#humidity");
+        elh.innerHTML = `humidity: ${data.detail.value} ${data.detail.unit}`;
+      }
+      function logDataGravity(data) {
+        const el = document.querySelector("#gravityvector");
+        el.innerHTML = `gravityvector: ${data.detail.value.x} ${data.detail.value.y} ${data.detail.value.z}`;
+      }
+          
+      document.querySelector("#connectBtn").addEventListener("click", async () => {
+          start(thingy);
+      });
+    </script>
+  </body>
+</html>
