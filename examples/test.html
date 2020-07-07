@@ -4,19 +4,24 @@
     <title>Thingy:52 Web Bluetooth</title>
   </head>
   <body>
-    <h1>Thingy:52 temperature reading example</h1>
+    <h1>Thingy:52 all sensor reading example</h1>
     <button id="connectBtn">Connect</button>
     <div id="temperature"></div>
     <div id="pressure"></div>
     <div id="gas"></div>
     <div id="humidity"></div>
+    <div id="orientation"></div>
+    <div id="quaternion"></div>
+    <div id="euler"></div>
+    <div id="rotationmatrix"></div>
     <div id="gravityvector"></div>
+    <div id="heading"></div>
+    <div id="rawdata"></div>
+
     <script type="module">
-      
       import Thingy from "./index.js";
-
       const thingy = new Thingy({logEnabled: true});
-
+//async functions
       async function start(device) {
         await device.connect();
         await device.temperature.start();
@@ -27,32 +32,69 @@
         await device.addEventListener("gas", logDataGas);
         await device.humidity.start();
         await device.addEventListener("humidity", logDataHumidity);  
+        await device.absoluteorientation.start();
+        await device.addEventListener("absoluteorientation", logDataOrientation);
+        await device.quaternionorientation.start();
+        await device.addEventListener("quaternionorientation", logDataQuaternionOrientation);  
+        await device.eulerorientation.start();
+        await device.addEventListener("eulerorientation", logDataEulerOrientation);
+        await device.rotationmatrixorientation.start();
+        await device.addEventListener("rotationmatrixorientation", logDataRotationMatrixOrientation);
         await device.gravityvector.start();
         await device.addEventListener("gravityvector", logDataGravity);
+        await device.heading.start();
+        await device.addEventListener("heading", logDataHeading);   
+        await device.rawdata.start();
+        await device.addEventListener("rawdata", logDataRawdata);   
       }
-
+//functions Definitions to Print the Output
       function logDataTemperature(data) {
-        const el = document.querySelector("#temperature");
-        el.innerHTML = `Temperature: ${data.detail.value} ${data.detail.unit}`;
-
+        const elT = document.querySelector("#temperature");
+        elT.innerHTML = `Temperature: ${data.detail.value} ${data.detail.unit}`;
       }
-       function logDataPressure(data) {
-        const elp = document.querySelector("#pressure");
-        elp.innerHTML = `Pressure: ${data.detail.value} ${data.detail.unit}`;
+      function logDataPressure(data) {
+        const elP = document.querySelector("#pressure");
+        elP.innerHTML = `Pressure: ${data.detail.value} ${data.detail.unit}`;
       }
       function logDataGas(data) {
-        const elg = document.querySelector("#gas");
-        elg.innerHTML = `co2: ${data.detail.eCO2.value} ${data.detail.eCO2.unit} tvoc: ${data.detail.TVOC.value} ${data.detail.TVOC.unit}`
+        const elG = document.querySelector("#gas");
+        elG.innerHTML = `Co2: ${data.detail.eCO2.value} ${data.detail.eCO2.unit} TVOC: ${data.detail.TVOC.value} ${data.detail.TVOC.unit}`
       }
       function logDataHumidity(data) {
-        const elh = document.querySelector("#humidity");
-        elh.innerHTML = `humidity: ${data.detail.value} ${data.detail.unit}`;
+        const elH = document.querySelector("#humidity");
+        elH.innerHTML = `Humidity: ${data.detail.value} ${data.detail.unit}`;
+      }
+      function logDataOrientation(data) {
+        const elO = document.querySelector("#orientation");
+        elO.innerHTML = `Orientation: ${data.detail.orientation}`;
+      }
+      function logDataQuaternionOrientation(data) {
+        const elQ = document.querySelector("#quaternion");
+        elQ.innerHTML = `Quaternion Orientation: W: ${data.detail.w} X: ${data.detail.x} Y: ${data.detail.y} Z: ${data.detail.z}`;
+      }
+      function logDataEulerOrientation(data) {
+        const elE = document.querySelector("#euler");
+        elE.innerHTML = `Euler Orientation: Roll: ${data.detail.roll} Pitch: ${data.detail.pitch} Yaw: ${data.detail.yaw}`;
+      }
+      function logDataRotationMatrixOrientation(data) {
+        const elR = document.querySelector("#rotationmatrix");
+        elR.innerHTML = `Rotation Matrix Orientation: Row1 ${data.detail.row1} Row2 ${data.detail.row2} Row3 ${data.detail.row3}`;
       }
       function logDataGravity(data) {
-        const el = document.querySelector("#gravityvector");
-        el.innerHTML = `gravityvector: ${data.detail.value.x} ${data.detail.value.y} ${data.detail.value.z}`;
+        const elGr = document.querySelector("#gravityvector");
+        elGr.innerHTML = `Gravity Vector: ${data.detail.value.x} ${data.detail.value.y} ${data.detail.value.z}`;
       }
-          
+      function logDataHeading(data) {
+        const elHe = document.querySelector("#heading");
+        elHe.innerHTML = `Heading: ${data.detail.heading}`;
+      }
+      function logDataRawdata(data) {
+        const elRa = document.querySelector("#rawdata");
+        elRa.innerHTML = `Accelerometer: X: ${data.detail.accelerometer.x} Y: ${data.detail.accelerometer.y} Z: ${data.detail.accelerometer.z} Unit: ${data.detail.accelerometer.unit}
+        Gyroscope: X: ${ data.detail.gyroscope.x } Y: ${ data.detail.gyroscope.y } Z: ${ data.detail.gyroscope.z } Unit: ${data.detail.gyroscope.unit }
+        Compass: X: ${data.detail.compass.x} Y: ${data.detail.compass.y} Z: ${data.detail.compass.z} Unit: ${data.detail.compass.unit}`;
+      }      
+      
       document.querySelector("#connectBtn").addEventListener("click", async () => {
           start(thingy);
       });
